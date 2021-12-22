@@ -1,0 +1,3 @@
+[Warn] C:\Users\Research\Documents\GitHub\battlecode2020\src\scalaplayer\RobotPlayer.scala:30: match may not be exhaustive.
+It would fail on the following input: COW
+one warning found

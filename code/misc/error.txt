@@ -1,0 +1,92 @@
+> Task :compileScala
+
+error: scala.reflect.internal.MissingRequirementError: object java.lang.Object in compiler mirror not found.
+at scala.reflect.internal.MissingRequirementError$.signal(MissingRequirementError.scala:17)
+at scala.reflect.internal.MissingRequirementError$.notFound(MissingRequirementError.scala:18)
+at scala.reflect.internal.Mirrors$RootsBase.getModuleOrClass(Mirrors.scala:53)
+at scala.reflect.internal.Mirrors$RootsBase.getModuleOrClass(Mirrors.scala:45)
+at scala.reflect.internal.Mirrors$RootsBase.getModuleOrClass(Mirrors.scala:45)
+
+at scala.reflect.internal.Mirrors$RootsBase.getModuleOrClass(Mirrors.scala:66)
+at scala.reflect.internal.Mirrors$RootsBase.getClassByName(Mirrors.scala:102)
+at scala.reflect.internal.Mirrors$RootsBase.getRequiredClass(Mirrors.scala:105)
+at scala.reflect.internal.Definitions$DefinitionsClass.ObjectClass$lzycompute(Definitions.scala:257)
+at scala.reflect.internal.Definitions$DefinitionsClass.ObjectClass(Definitions.scala:257)
+at scala.reflect.internal.Definitions$DefinitionsClass.init(Definitions.scala:1394)
+at scala.tools.nsc.Global$Run.(Global.scala:1215)
+at scala.tools.nsc.Driver.doCompile(Driver.scala:31)
+at scala.tools.nsc.MainClass.doCompile(Main.scala:23)
+at scala.tools.nsc.Driver.process(Driver.scala:51)
+at scala.tools.nsc.Main.process(Main.scala)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+at sbt.internal.inc.RawCompiler.getReporter$1(RawCompiler.scala:56)
+at sbt.internal.inc.RawCompiler.apply(RawCompiler.scala:77)
+at sbt.internal.inc.AnalyzingCompiler$.$anonfun$compileSources$6(AnalyzingCompiler.scala:363)
+at sbt.internal.inc.AnalyzingCompiler$.handleCompilationError$1(AnalyzingCompiler.scala:338)
+at sbt.internal.inc.AnalyzingCompiler$.$anonfun$compileSources$4(AnalyzingCompiler.scala:359)
+at sbt.internal.inc.AnalyzingCompiler$.$anonfun$compileSources$4$adapted(AnalyzingCompiler.scala:354)
+at sbt.io.IO$.withTemporaryDirectory(IO.scala:489)
+at sbt.io.IO$.withTemporaryDirectory(IO.scala:499)
+at sbt.internal.inc.AnalyzingCompiler$.$anonfun$compileSources$2(AnalyzingCompiler.scala:354)
+at sbt.internal.inc.AnalyzingCompiler$.$anonfun$compileSources$2$adapted(AnalyzingCompiler.scala:346)
+at sbt.io.IO$.withTemporaryDirectory(IO.scala:489)
+at sbt.io.IO$.withTemporaryDirectory(IO.scala:499)
+at sbt.internal.inc.AnalyzingCompiler$.compileSources(AnalyzingCompiler.scala:346)
+at org.gradle.api.internal.tasks.scala.ZincScalaCompilerFactory.lambda$getBridgeJar$0(ZincScalaCompilerFactory.java:114)
+at org.gradle.cache.internal.DefaultCacheAccess.useCache(DefaultCacheAccess.java:223)
+at org.gradle.cache.internal.DefaultPersistentDirectoryStore.useCache(DefaultPersistentDirectoryStore.java:182)
+at org.gradle.cache.internal.DefaultCacheFactory$ReferenceTrackingCache.useCache(DefaultCacheFactory.java:206)
+at org.gradle.api.internal.tasks.scala.ZincScalaCompilerFactory.getBridgeJar(ZincScalaCompilerFactory.java:103)
+at org.gradle.api.internal.tasks.scala.ZincScalaCompilerFactory.getCompiler(ZincScalaCompilerFactory.java:66)
+at org.gradle.api.internal.tasks.scala.ZincScalaCompilerFacade.execute(ZincScalaCompilerFacade.java:47)
+at org.gradle.api.internal.tasks.scala.ZincScalaCompilerFacade.execute(ZincScalaCompilerFacade.java:32)
+at org.gradle.api.internal.tasks.compile.daemon.AbstractDaemonCompiler$CompilerWorkAction.execute(AbstractDaemonCompiler.java:113)
+at org.gradle.workers.internal.DefaultWorkerServer.execute(DefaultWorkerServer.java:50)
+at org.gradle.workers.internal.AbstractClassLoaderWorker$1.create(AbstractClassLoaderWorker.java:47)
+at org.gradle.workers.internal.AbstractClassLoaderWorker$1.create(AbstractClassLoaderWorker.java:37)
+at org.gradle.internal.classloader.ClassLoaderUtils.executeInClassloader(ClassLoaderUtils.java:98)
+at org.gradle.workers.internal.AbstractClassLoaderWorker.executeInClassLoader(AbstractClassLoaderWorker.java:37)
+at org.gradle.workers.internal.IsolatedClassloaderWorker.execute(IsolatedClassloaderWorker.java:49)
+at org.gradle.workers.internal.WorkerDaemonServer.execute(WorkerDaemonServer.java:84)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+at org.gradle.process.internal.worker.request.WorkerAction$1.call(WorkerAction.java:129)
+at org.gradle.process.internal.worker.child.WorkerLogEventListener.withWorkerLoggingProtocol(WorkerLogEventListener.java:41)
+at org.gradle.process.internal.worker.request.WorkerAction.run(WorkerAction.java:126)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+at java.base/java.lang.reflect.Method.invoke(Method.java:566)
+at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:36)
+at org.gradle.internal.dispatch.ReflectionDispatch.dispatch(ReflectionDispatch.java:24)
+at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:182)
+at org.gradle.internal.remote.internal.hub.MessageHubBackedObjectConnection$DispatchWrapper.dispatch(MessageHubBackedObjectConnection.java:164)
+at org.gradle.internal.remote.internal.hub.MessageHub$Handler.run(MessageHub.java:412)
+at org.gradle.internal.concurrent.ExecutorPolicy$CatchAndRecordFailures.onExecute(ExecutorPolicy.java:64)
+at org.gradle.internal.concurrent.ManagedExecutorImpl$1.run(ManagedExecutorImpl.java:48)
+at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1128)
+at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:628)
+at org.gradle.internal.concurrent.ThreadFactoryImpl$ManagedThreadRunnable.run(ThreadFactoryImpl.java:56)
+at java.base/java.lang.Thread.run(Thread.java:829)
+
+
+> Task :compileScala FAILED
+
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileScala'.
+> org.gradle.internal.serialize.PlaceholderException (no error message)
+
+* Try:
+Run with --stacktrace option to get the stack trace. Run with --info or --debug option to get more log output. Run with --scan to get full insights.
+
+* Get more help at https://help.gradle.org
+
+BUILD FAILED in 2m 13s

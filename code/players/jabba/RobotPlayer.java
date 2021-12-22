@@ -1,5 +1,9 @@
-package examplefuncsplayer; // change  
+package examplefuncsplayer;
 import battlecode.common.*;
+
+import javax.xml.stream.Location;
+import java.awt.*;
+import java.util.Arrays;
 
 public strictfp class RobotPlayer {
     static RobotController rc;
@@ -14,6 +18,7 @@ public strictfp class RobotPlayer {
         Direction.WEST,
         Direction.NORTHWEST
     };
+
     static RobotType[] spawnedByMiner = {RobotType.REFINERY, RobotType.VAPORATOR, RobotType.DESIGN_SCHOOL,
             RobotType.FULFILLMENT_CENTER, RobotType.NET_GUN};
 
@@ -39,7 +44,7 @@ public strictfp class RobotPlayer {
             try {
                 // Here, we've separated the controls into a different method for each RobotType.
                 // You can add the missing ones or rewrite this into your own control structure.
-                System.out.println("I'm a poop " + rc.getType() + "! Location " + rc.getLocation());
+                System.out.println("I'm a " + rc.getType() + "! Location " + rc.getLocation());
                 switch (rc.getType()) {
                     case HQ:                 runHQ();                break;
                     case MINER:              runMiner();             break;
@@ -63,16 +68,66 @@ public strictfp class RobotPlayer {
     }
 
     static void runHQ() throws GameActionException {
-        for (Direction dir : directions)
-            tryBuild(RobotType.MINER, dir);
+        if (!check_if_nearby(RobotType.MINER)) {
+            tryBuild(RobotType.MINER, Direction.NORTH);
+        }
+
+        /*
+        int [] location_arr = rc.getLocation();
+        int x = location_arr[0];
+        int y = location_arr[0];
+
+        String location_message = "999";
+
+        if (x<10) {
+            location_message += "0"+Integer.toString(x);
+        }
+
+        else {
+            location_message += x;
+        }
+
+        if (y<10) {
+            location_message += "0"+Integer.toString(y);
+        }
+
+        else {
+            location_message += y;
+        }
+
+        int location_int = String.toInt(location_message);
+
+        if (rc.canSubmitTransaction() {
+            rc.submitTransaction();
+        }
+         */
+
+
     }
 
     static void runMiner() throws GameActionException {
 
-        float current_cool = rc.getCooldownTurns();
-        System.out.println("Current Cooldown"+current_cool);
+        if (!check_if_nearby(RobotType.DESIGN_SCHOOL)) {
+            tryBuild(RobotType.DESIGN_SCHOOL, Direction.EAST);
+        }
 
-        // can build a design school for 150 soup
+        else {
+            for (Direction dir : directions)
+                if (tryRefine(dir))
+                    System.out.println("I refined soup! " + rc.getTeamSoup());
+            for (Direction dir : directions)
+                if (tryMine(dir))
+                    System.out.println("I mined soup! " + rc.getSoupCarrying());
+        }
+
+
+        // need to write exploring routine .. soup can be refined at hq
+
+
+        // cool func: rc.senseNearbySoup()
+        // probably want to run senseSoup(MapLocation loc) to go to most soups (or develop priority algo)
+
+
 
         /*
 
@@ -93,13 +148,55 @@ public strictfp class RobotPlayer {
     }
 
     static void runDesignSchool() throws GameActionException {
-        for (Direction dir : directions)
-            tryBuild(RobotType.LANDSCAPER, dir);
+        // first check if there is a landscaper nearby
+        if (!check_if_nearby(RobotType.LANDSCAPER)) {
+            tryBuild(RobotType.LANDSCAPER, Direction.NORTHEAST);
+        }
     }
 
     static void runLandscaper() throws GameActionException {
-        float current_cool = rc.getCooldownTurns();
-        int dirt_carrying = rc.getDirtCarrying();
+
+        MapLocation hq_loc = null;
+
+        // first check if hq within range
+
+        if (check_if_nearby(RobotType.HQ)) {
+            MapLocation search_result = get_robot_location(RobotType.HQ);
+            if (!search_result.equals(null)) {
+                hq_loc = search_result;
+            }
+        }
+
+
+
+
+
+        /*
+        // need to check if the ne tile can be dug at, if not check others.
+        // fix below blob
+        if (rc.getDirtCarrying()==0) {
+            while (rc.getDirtCarrying()<12) {
+                if (rc.canDigDirt(Direction.NORTHEAST)) {
+                    rc.digDirt(Direction.NORTHEAST);
+                }
+            }
+        }
+        */
+
+        /*
+        rc.digDirt(Direction.NORTHEAST);
+        rc.depositDirt(Direction.CENTER);
+        rc.move(Direction.WEST);
+        rc.digDirt(Direction.NORTHEAST);
+        rc.depositDirt(Direction.CENTER);
+        rc.move(Direction.WEST);
+        rc.digDirt(Direction.NORTHEAST);
+        rc.depositDirt(Direction.CENTER);
+        rc.move(Direction.WEST);
+        rc.move(Direction.CENTER.rotateLeft());
+        rc.move(Direction.CENTER.rotateLeft());
+        */
+
 
         // need to check cooldown
         // need to move to locations in square around HQ (so HQ needs to communicate it's location)
@@ -108,22 +205,67 @@ public strictfp class RobotPlayer {
         // dig dirt with rc.digDirt()
         // dirt carrying limit is 25
 
+    }
 
-        if (dirt_carrying>0) {
-            // go to spot in wall and deposit dirt
+    ///// MY CUSTOM STUFF /////
 
+    public static int[] manhattan_step(int x1, int x2, int y1, int y2) {
+        int x_dif = x2 - x1;
+        int y_dif = y2-y1;
+
+        int[] action_arr = {0,0};
+
+        if (x_dif>0) {
+            action_arr[0]=1;
         }
 
+        else if (x_dif<0) {
+            action_arr[0]=-1;
+        }
 
+        else if (y_dif>0) {
+            action_arr[1]=1;
+        }
 
+        else if (y_dif<0) {
+            action_arr[1]=-1;
+        }
+
+        return action_arr;
     }
 
-    // maybe make a function called manhattan_step() which computes shortest manhattan path
-    // between two points and returns the next step that the robot should take
+    // this function checks if a particular robot type is within a robot's vision range
+    // add feature so it returns coordinate?
+    public static boolean check_if_nearby(RobotType robot_to_check) {
+        boolean type_is_nearby = false;
+        RobotInfo [] nearby_info = rc.senseNearbyRobots();
+        for (RobotInfo info : nearby_info) {
+            RobotType test_type = info.type;
+            if (test_type.equals(robot_to_check)) {
+                type_is_nearby = true;
+                break;
+            }
+        }
 
-    static void manhattanStep(int[] current_loc, int[] destination_loc) throws GameActionException {
-
+        return type_is_nearby;
     }
+
+    // returns the location of the first occurance of a robot within range
+    public static MapLocation get_robot_location(RobotType robot_to_check) {
+        MapLocation target_location = null;
+        RobotInfo [] nearby_info = rc.senseNearbyRobots();
+        for (RobotInfo info : nearby_info) {
+            RobotType test_type = info.type;
+            if (test_type.equals(robot_to_check)) {
+                target_location = info.getLocation();
+                break;
+            }
+        }
+
+        return target_location;
+    }
+
+    //////////////////////////////////// STUFF I HAVE NOT WORKED WITH /////////////////
 
     static void runRefinery() throws GameActionException {
         // System.out.println("Pollution: " + rc.sensePollution(rc.getLocation()));
